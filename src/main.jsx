@@ -12,6 +12,7 @@ import '../styles/ProductsSection.css'
 import '../styles/PPESection.css'
 import '../styles/Footer.css'
 import '../styles/ProductPage.css'
+import '../styles/Admin.css'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

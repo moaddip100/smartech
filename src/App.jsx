@@ -3,6 +3,8 @@ import { ADMIN_PASSWORD, AUTH_KEY } from './constants'
 import { ProductsProvider } from './context/ProductsContext'
 import SiteHeader from './components/SiteHeader'
 import Footer from './components/Footer'
+import AdminHeader from './components/AdminHeader'
+import AdminFooter from './components/AdminFooter'
 import ProductPage from './components/ProductPage'
 import AdminLogin from './components/AdminLogin'
 import AdminPanel from './components/AdminPanel'
@@ -48,15 +50,23 @@ export default function App() {
   return (
     <ProductsProvider>
       <div className="page-container">
-        <SiteHeader />
         {route.name === 'admin' ? (
-          <AdminPanel onLogout={handleLogout} />
-        ) : route.name === 'product' ? (
-          <ProductPage id={route.id} />
+          <>
+            <AdminHeader />
+            <AdminPanel onLogout={handleLogout} />
+            <AdminFooter />
+          </>
         ) : (
-          <HomePage />
+          <>
+            <SiteHeader />
+            {route.name === 'product' ? (
+              <ProductPage id={route.id} />
+            ) : (
+              <HomePage />
+            )}
+            <Footer />
+          </>
         )}
-        <Footer />
       </div>
     </ProductsProvider>
   )

@@ -1,0 +1,16 @@
+.admin-header{background:#111;color:#fff;position:sticky;top:0;z-index:50}
+.admin-header__inner{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.admin-header__brand{font-weight:700;cursor:pointer}
+.admin-header__nav{display:flex;gap:16px}
+.admin-header__link{color:#ddd;text-decoration:none}
+.admin-header__link:hover,.admin-header__link:focus{color:#fff}
+
+.admin-footer{background:#111;color:#aaa;margin-top:auto}
+.admin-footer__inner{max-width:1200px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between}
+.admin-footer__copy{margin:0}
+.admin-footer__link{color:#ddd;text-decoration:none}
+.admin-footer__link:hover,.admin-footer__link:focus{color:#fff}
+
+/* Ограничим влияние админских форм */
+.admin-panel{max-width:1200px;margin:16px auto;padding:0 16px}
+.admin-panel h1,h2,h3{color:#111}
