@@ -1,0 +1,66 @@
+/* src/components/PPESection.css */
+.ppe-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.ppe-card {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.ppe-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.ppe-info {
+  padding: 25px;
+}
+
+.ppe-info h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.ppe-info p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.ppe-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+/* Убираем стандартное подчёркивание и фиолетовый цвет у ссылок-карточек */
+.card-link,
+.card-link * {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.card-link:visited,
+.card-link:hover,
+.card-link:active,
+.card-link:focus {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Доступный фокус */
+.card-link:focus {
+  outline: 3px solid rgba(6, 150, 136, 0.12);
+  outline-offset: 4px;
+}

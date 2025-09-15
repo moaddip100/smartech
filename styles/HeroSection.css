@@ -1,0 +1,97 @@
+.hero-section {
+  background-color: #f5f3ef;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* лучше выравнивать по центру для мобильных */
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
+  padding: 0 20px; /* защитные отступы на узких экранах */
+  box-sizing: border-box;
+}
+
+.hero-text {
+  flex: 1;
+  padding: 0 0 100px 0;
+}
+
+.hero-text p {
+  max-width: 500px; /* не превышать 500px на больших экранах */
+  width: 100%;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* button styles centralized in SiteHeader.css */
+
+/* Расстояние 15px между кнопками в блоке hero (десктоп) */
+.hero-text .hero-button {
+  margin-right: 15px;
+}
+
+/* hover состояния кнопок централизованы в SiteHeader.css */
+
+.hero-image {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image img {
+  max-width: 100%;
+  display: block;
+  width: 100%;
+  max-width: 550px; /* ограничение на больших экранах */
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+}
+
+/* Mobile: stack hero vertically and prevent overflow */
+@media (max-width: 768px) {
+  .hero { flex-direction: column; align-items: center; gap: 18px; }
+  .hero-text { padding-bottom: 0; }
+  .hero-text p { font-size: 1.1rem; }
+  .hero-image { width: 100%; }
+  .hero-image img { max-width: 420px; }
+  /* На мобильных кнопки стекаются — используем вертикальный отступ */
+  .hero-text .hero-button { margin-right: 0; margin-bottom: 15px; }
+}
+
+@media (max-width: 480px) {
+  .hero { padding: 0 12px; }
+  .hero-text p { font-size: 1rem; }
+  .hero-image img { max-width: 320px; }
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.hero-overlay h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #222;
+}

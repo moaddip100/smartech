@@ -1,0 +1,145 @@
+.categories-section .container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; /* гарантия отступов на мобильных */
+}
+
+.categories-section {
+  padding: 60px 0;
+  background-color: #f9f9f9;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-bottom: 50px;
+}
+
+.category {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.category:hover {
+  transform: translateY(-5px);
+}
+
+.category h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.category li {
+  padding: 6px 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.prev-text {
+  width: 250px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.prev-text:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.card p {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 220px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.sidebar li {
+  margin: 10px 0;
+  padding: 0 0 6px;
+}
+
+.sidebar a {
+  display: inline-block;
+  color: #888; /* серый по умолчанию */
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.sidebar a:hover,
+.sidebar a:focus {
+  color: #000; /* при ховере — чёрный */
+  transform: scale(1.03); /* лёгкое увеличение */
+  outline: none;
+}
+
+/* Дополнительно: подчеркнуть текущий/активный элемент при желании */
+.sidebar a.active {
+  color: #000;
+  font-weight: 600;
+}
+
+/* Non-active categories: default gray, on hover become black (no animation/transform) */
+.sidebar .category-inactive {
+  color: #888;
+  cursor: default;
+  transition: none;
+  display: inline-block; /* keep layout similar to links */
+}
+.sidebar .category-inactive:hover {
+  color: #000;
+}
+
+/* Responsive: stack sidebar and cards on smaller screens */
+@media (max-width: 992px) {
+  .container { flex-direction: column; gap: 20px; }
+  .sidebar { width: 100%; order: 1; }
+  .cards { order: 2; grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .container { padding: 0 12px; }
+  .sidebar { width: 100%; }
+  .cards { grid-template-columns: 1fr; gap: 16px; }
+  .prev-text { width: 100%; padding: 18px; }
+}

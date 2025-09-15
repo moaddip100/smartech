@@ -1,0 +1,256 @@
+:root {
+  --logo-brand-font: 'Arimo', sans-serif;
+  --logo-suffix-font: 'Arimo', sans-serif;
+}
+
+.site-header {
+  background-color: #6fe7de;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.logo h1 {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+}
+
+.logo-brand {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #000; /* plain black logo text */
+
+  /* animation / shadow */
+  display: inline-block;
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), text-shadow 220ms ease, opacity 220ms ease;
+  will-change: transform, text-shadow, opacity;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.12), 0 3px 8px rgba(4,10,23,0.06);
+}
+
+.logo-brand:hover,
+.logo-brand:focus {
+  transform: translateY(-4px) scale(1.02);
+  text-shadow: 0 6px 18px rgba(4,10,23,0.14), 0 1px 0 rgba(255,255,255,0.06);
+  opacity: 0.98;
+}
+
+/* Суффикс иноязычного слова/описания */
+.logo-suffix {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000; /* make suffix black too */
+  margin-left: 8px;
+  transition: color 200ms ease, transform 200ms ease;
+  display: inline-block;
+}
+
+.logo-suffix:hover,
+.logo-suffix:focus {
+  color: #083b43;
+  transform: translateY(-2px);
+}
+
+/* Стиль подписи платформы */
+.logo-platform {
+  margin-top: 6px;
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.85); /* темно-teal с лёгкой прозрачностью */
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: none;
+  background: none;
+  background-clip: unset;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: initial;
+}
+
+/* CSS-переменные для быстрой кастомизации (опционально) */
+:root {
+  --logo-brand-font: 'Arial', sans-serif;
+  --logo-suffix-font: 'Arial', sans-serif;
+}
+
+.logo-brand {
+  font-family: var(--logo-brand-font);
+}
+
+.logo-suffix {
+  font-family: var(--logo-suffix-font);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.flag {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 2px solid rgba(255,255,255,0.6);
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Active press feedback */
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-yellow {
+  background: linear-gradient(180deg,#ffd600 0%, #f6c500 100%);
+  color: #111;
+}
+
+.btn-white {
+  background-color: #ffffff;
+  color: #000;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Orange button variant used in product cards */
+.btn-orange {
+  background: linear-gradient(180deg,#ff9b00 0%, #ff7a00 100%);
+  color: #111;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Keyboard focus visibility */
+.btn:focus-visible {
+  outline: 3px solid rgba(6, 150, 136, 0.35);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-brand,
+  .logo-suffix {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Немного уменьшим размер иконок на мобильных */
+@media (max-width: 480px) {
+  .flag {
+    width: 34px;
+    height: 34px;
+  }
+  .logo-brand {
+    font-size: 1.6rem;
+  }
+  .logo-suffix {
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile layout improvements for header */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 8px 12px;
+    gap: 12px;
+  }
+  .header-actions { gap: 8px; }
+  .logo { align-items: flex-start; }
+  .logo-platform { font-size: 0.95rem; }
+  .btn { padding: 8px 14px; border-radius: 20px; }
+}
+
+/* Mobile hamburger button */
+.mobile-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.mobile-toggle .hamburger,
+.mobile-toggle .hamburger:before,
+.mobile-toggle .hamburger:after {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #083b43;
+  border-radius: 2px;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+.mobile-toggle .hamburger:before { transform: translateY(-7px); }
+.mobile-toggle .hamburger:after { transform: translateY(5px); }
+
+/* When open, transform into X */
+.mobile-toggle.open .hamburger { transform: rotate(45deg); }
+.mobile-toggle.open .hamburger:before { transform: rotate(90deg) translateX(-1px); }
+.mobile-toggle.open .hamburger:after { opacity: 0; }
+
+/* Show mobile toggle and collapse actions on small screens */
+@media (max-width: 768px) {
+  .mobile-toggle { display: inline-flex; }
+  .header-actions { display: none; position: absolute; right: 12px; top: 70px; background: white; padding: 12px; border-radius: 10px; box-shadow: 0 8px 28px rgba(0,0,0,0.12); flex-direction: column; gap: 8px; }
+  .header-actions.open { display: flex; }
+  .header-actions .btn { width: 200px; }
+}
+
+/* Стили для отдельных букв логотипа */
+.logo-brand .logo-char {
+  display: inline-block;
+  padding: 0 1px;
+  line-height: 1;
+  transform-origin: center bottom;
+  transition: transform 260ms cubic-bezier(.2,.9,.2,1), text-shadow 260ms ease, opacity 200ms ease;
+  will-change: transform, text-shadow, opacity;
+  color: #000; /* individual letters also black */
+}
+
+/* Hover/focus — буква всплывает и получает тень */
+.logo-brand .logo-char:hover,
+.logo-brand .logo-char:focus {
+  transform: translateY(-8px) scale(1.12);
+  text-shadow: 0 10px 24px rgba(4,10,23,0.16);
+  outline: none;
+}
+
+/* Небольшая задержка при фокусе через клавиатуру — используем индекс, если нужно кастомизировать */
+.logo-brand .logo-char[style] {
+  /* transition-delay может учитывать переменную --i, задаваемую в inline style */
+  transition-delay: calc(var(--i, 0) * 40ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-brand .logo-char {
+    transition: none !important;
+    transform: none !important;
+  }
+}

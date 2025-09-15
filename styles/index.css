@@ -1,0 +1,39 @@
+*{
+  box-sizing: border-box;
+  font-family: "Arimo", sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Arimo", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth; /* плавная прокрутка для якорных ссылок */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Layout: sticky footer */
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* On pages where <main> is used (e.g., ProductCard) it will take the remaining height */
+.page-container > main {
+  flex: 1 0 auto;
+}
+
+/* On pages without <main>, push footer to bottom */
+.page-container > .footer {
+  margin-top: auto;
+}
+

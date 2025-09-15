@@ -1,0 +1,142 @@
+/* src/components/ProductsSection.css */
+.products-section,
+.ppe-section {
+  padding: 60px 0;
+  background-color: #fff;
+}
+
+.products-section h2,
+.ppe-section h2 {
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 50px;
+  color: #333;
+}
+
+/* Заголовок секции — бледный серый и увеличенный */
+.section-title {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 700;
+  color: #d0d0d0;
+  margin-top: 30px;
+  margin-bottom: 24px;
+}
+
+/* Контейнер карточек — фиксированная максимальная ширина и центрирование */
+.card-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* Каждая карточка растягивается по ширине контейнера */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  background: #f5f2ef; /* чуть более бежевый */
+  border-radius: 28px;
+  padding: 40px 44px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.02);
+  margin-bottom: 34px;
+}
+
+.card-content {
+  flex: 1 1 auto;
+}
+
+.card-content h2 {
+  font-size: 44px; /* крупный заголовок */
+  margin: 0 0 18px 0;
+  color: #0b0b0b;
+  line-height: 1;
+}
+
+.card-content p {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  margin: 0 0 22px 0;
+  max-width: 760px;
+}
+
+.card-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+/* Изображение справа — белая карточка с большим радиусом */
+.card-image {
+  flex: 0 0 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.card-image img {
+  width: 140px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Убираем стандартное подчёркивание и фиолетовый цвет у ссылок-карточек */
+.card-link,
+.card-link * {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.card-link:visited,
+.card-link:hover,
+.card-link:active,
+.card-link:focus {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Доступный фокус: мягкая рамка, если пользователь фокусируется клавишей */
+.card-link:focus {
+  outline: 3px solid rgba(6, 150, 136, 0.12);
+  outline-offset: 4px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px;
+  }
+  .card-image {
+    width: 100%;
+    flex: 0 0 auto;
+    margin-top: 18px;
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .card-image img { width: 180px; }
+}
+
+@media (max-width: 480px) {
+  .card-content h2 { font-size: 28px; }
+  .card-content p { font-size: 15px; }
+  .card-image img { width: 140px; }
+}
+
+/* Additional mobile adjustments */
+@media (max-width: 768px) {
+  .card { padding: 20px; border-radius: 18px; }
+  .card-content p { font-size: 15px; }
+  .btn { width: 100%; padding: 12px; }
+  .card-buttons { flex-direction: column; }
+}
