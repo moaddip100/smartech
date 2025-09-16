@@ -4,7 +4,7 @@ import { CATEGORIES } from '../constants'
 import imgCt from '../../img/imgCt.png'
 import imgCt2 from '../../img/imgCt2.png'
 import { useProductsCtx } from '../context/ProductsContext'
-import { translateText } from '../utils/translate'
+import { translateText, isTranslateConfigured } from '../utils/translate'
 
 export default function AdminPanel({ onLogout }) {
   const { products, addProduct, updateProduct, deleteProduct } = useProductsCtx()
@@ -142,6 +142,11 @@ export default function AdminPanel({ onLogout }) {
           Auto-translate EN → ES
         </label>
         <span style={{ color: '#666', fontSize: 12 }}>Spanish fields will be prefilled automatically when typing English (can be edited).</span>
+        {!isTranslateConfigured && (
+          <span style={{ color: '#a94442', fontSize: 12 }}>
+            Note: translation API is not configured, Spanish fields will mirror English. Set VITE_TRANSLATE_API_URL in .env to enable real translation.
+          </span>
+        )}
       </div>
 
       <form onSubmit={onSubmit} style={{ background: '#fff', border: '1px solid #eee', borderRadius: 12, padding: 16, boxShadow: '0 5px 15px rgba(0,0,0,0.05)', marginBottom: 24 }}>

@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
 // Клиент LibreTranslate-совместимого API.
 // Настройка через .env:
 // VITE_TRANSLATE_API_URL=https://<your-libtranslate>/translate
 // VITE_TRANSLATE_API_KEY=<optional>
 
+export const isTranslateConfigured = !!import.meta.env.VITE_TRANSLATE_API_URL
+
 export async function translateText(text, from = 'en', to = 'es') {
   try {
     if (!text || !text.trim()) return text
-    const url = import.meta.env.VITE_TRANSLATE_API_URL
+  const url = import.meta.env.VITE_TRANSLATE_API_URL
     if (!url) return text // не настроено — без перевода
 
     const apiKey = import.meta.env.VITE_TRANSLATE_API_KEY
