@@ -12,11 +12,11 @@ export default function Footer() {
     <footer className="footer">
       <div className="social-icons">
         <div className="social-icon"><a href="mailto:ruslanlav547@gmail.com" aria-label="Send email to ruslanlav547@gmail.com"><img loading="lazy" width="40" height="40" src={emailIcon} alt="Email" /></a></div>
-        <div className="social-icon"><a href="https://wa.me/79994536021" aria-label="Chat on WhatsApp" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={whatsAppIcon} alt="WhatsApp" /></a></div>
-        <div className="social-icon"><a href="https://www.facebook.com/" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={facebookIcon} alt="Facebook" /></a></div>
-        <div className="social-icon"><a href="https://www.tiktok.com/" aria-label="TikTok" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={tiktokIcon} alt="TikTok" /></a></div>
-        <div className="social-icon"><a href="https://www.instagram.com/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={instagramIcon} alt="Instagram" /></a></div>
-        <div className="social-icon"><a href="https://www.youtube.com/" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={youtubeIcon} alt="YouTube" /></a></div>
+        <div className="social-icon"><a href="https://wa.me/995597753355" aria-label="Chat on WhatsApp" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={whatsAppIcon} alt="WhatsApp" /></a></div>
+        <div className="social-icon"><a href="https://www.facebook.com/share/1CVVnMXzhL/?mibextid=wwXIfr" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={facebookIcon} alt="Facebook" /></a></div>
+        <div className="social-icon"><a href="https://www.tiktok.com/@smartech.prof" aria-label="TikTok" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={tiktokIcon} alt="TikTok" /></a></div>
+        <div className="social-icon"><a href="https://instagram.com/smartech.prof" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={instagramIcon} alt="Instagram" /></a></div>
+        <div className="social-icon"><a href="https://youtube.com/@smartech-prof" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={youtubeIcon} alt="YouTube" /></a></div>
         <div className="social-icon"><a href="https://www.linkedin.com/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={linkedinIcon} alt="LinkedIn" /></a></div>
       </div>
       <div className="copyright">
