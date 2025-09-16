@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useI18n } from '../i18n/I18nProvider'
 import { CATEGORIES } from '../constants'
 import imgCt from '../../img/imgCt.png'
 import imgCt2 from '../../img/imgCt2.png'
 import { useProductsCtx } from '../context/ProductsContext'
+import { translateText } from '../utils/translate'
 
 export default function AdminPanel({ onLogout }) {
   const { products, addProduct, updateProduct, deleteProduct } = useProductsCtx()
@@ -11,10 +13,17 @@ export default function AdminPanel({ onLogout }) {
   const emptyForm = { id: null, title_en: '', title_es: '', description_en: '', description_es: '', category: CATEGORIES[0].value, images: [] }
   const [form, setForm] = useState(emptyForm)
   const [isEditing, setIsEditing] = useState(false)
+  const [autoTranslate, setAutoTranslate] = useState(true)
+  const [esTitleTouched, setEsTitleTouched] = useState(false)
+  const [esDescTouched, setEsDescTouched] = useState(false)
+  const titleTimer = useRef()
+  const descTimer = useRef()
 
   function handleInput(e) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
+    if (name === 'title_es') setEsTitleTouched(true)
+    if (name === 'description_es') setEsDescTouched(true)
   }
 
   async function filesToBase64(files) {
@@ -47,12 +56,16 @@ export default function AdminPanel({ onLogout }) {
       images: p.images || []
     })
     setIsEditing(true)
+    setEsTitleTouched(!!(p.title_es))
+    setEsDescTouched(!!(p.description_es))
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   function resetForm() {
     setForm(emptyForm)
     setIsEditing(false)
+    setEsTitleTouched(false)
+    setEsDescTouched(false)
   }
 
   function onSubmit(e) {
@@ -86,6 +99,33 @@ export default function AdminPanel({ onLogout }) {
     resetForm()
   }
 
+  // Автоперевод EN→ES с дебаунсом
+  useEffect(() => {
+    if (!autoTranslate) return
+    if (esTitleTouched) return
+    const val = form.title_en?.trim()
+    if (!val) return
+    clearTimeout(titleTimer.current)
+    titleTimer.current = setTimeout(async () => {
+      const translated = await translateText(val, 'en', 'es')
+      setForm(prev => (prev.title_es ? prev : { ...prev, title_es: translated }))
+    }, 500)
+    return () => clearTimeout(titleTimer.current)
+  }, [form.title_en, autoTranslate, esTitleTouched])
+
+  useEffect(() => {
+    if (!autoTranslate) return
+    if (esDescTouched) return
+    const val = form.description_en?.trim()
+    if (!val) return
+    clearTimeout(descTimer.current)
+    descTimer.current = setTimeout(async () => {
+      const translated = await translateText(val, 'en', 'es')
+      setForm(prev => (prev.description_es ? prev : { ...prev, description_es: translated }))
+    }, 600)
+    return () => clearTimeout(descTimer.current)
+  }, [form.description_en, autoTranslate, esDescTouched])
+
   function removeImage(i) {
     setForm(prev => ({ ...prev, images: prev.images.filter((_, idx) => idx !== i) }))
   }
@@ -95,6 +135,14 @@ export default function AdminPanel({ onLogout }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '6px 0 10px' }}>
   <h2 style={{ margin: 0 }}>Admin panel: Products</h2>
   {onLogout ? <button className="btn btn-white" onClick={onLogout}>Sign out</button> : null}
+      </div>
+
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center', margin: '8px 0 12px' }}>
+        <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <input type="checkbox" checked={autoTranslate} onChange={(e)=> setAutoTranslate(e.target.checked)} />
+          Auto-translate EN → ES
+        </label>
+        <span style={{ color: '#666', fontSize: 12 }}>Spanish fields will be prefilled automatically when typing English (can be edited).</span>
       </div>
 
       <form onSubmit={onSubmit} style={{ background: '#fff', border: '1px solid #eee', borderRadius: 12, padding: 16, boxShadow: '0 5px 15px rgba(0,0,0,0.05)', marginBottom: 24 }}>
