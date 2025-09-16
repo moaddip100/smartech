@@ -3,6 +3,8 @@ import imgCt from '../../img/imgCt.png'
 import imgCt2 from '../../img/imgCt2.png'
 
 const STORAGE_KEY = 'smartech_products_v1'
+const SCHEMA_VERSION_KEY = 'smartech_products_schema_v'
+const CURRENT_SCHEMA_VERSION = 2
 
 function seedProducts() {
   // initial 6 products (3 building, 3 ppe)
@@ -22,15 +24,31 @@ function loadProducts() {
     if (!raw) return seedProducts()
     const parsed = JSON.parse(raw)
     if (!Array.isArray(parsed)) return seedProducts()
-    // Миграция: переносим базовые поля в локализованные, если их нет
-    const migrated = parsed.map(p => {
-      const title_en = p.title_en || p.title || ''
-      const description_en = p.description_en || p.description || ''
-      const images = Array.isArray(p.images) ? p.images : (p.images ? [p.images] : [])
-      return { ...p, title_en, description_en, title: title_en, description: description_en, images }
-    })
-    // Возвращаем уже мигрированные данные
-    return migrated
+    const storedVer = Number(localStorage.getItem(SCHEMA_VERSION_KEY) || '0')
+    if (storedVer < CURRENT_SCHEMA_VERSION) {
+      // Миграция: переносим базовые поля в локализованные, если их нет;
+      // существующие title_es/description_es сохраняем, не перетираем.
+      const migrated = parsed.map(p => {
+        const title_en = p.title_en || p.title || ''
+        const description_en = p.description_en || p.description || ''
+        const images = Array.isArray(p.images) ? p.images : (p.images ? [p.images] : [])
+        return {
+          ...p,
+          title_en,
+          description_en,
+          // обратная совместимость для старого UI
+          title: title_en,
+          description: description_en,
+          images,
+        }
+      })
+      // Сохраняем результат миграции и версию схемы, чтобы больше не трогать данные
+      localStorage.setItem(SCHEMA_VERSION_KEY, String(CURRENT_SCHEMA_VERSION))
+      saveProducts(migrated)
+      return migrated
+    }
+    // Версия актуальна — возвращаем как есть
+    return parsed
   } catch {
     return seedProducts()
   }
@@ -54,6 +72,8 @@ export function ProductsProvider({ children }) {
 
   useEffect(() => {
     saveProducts(products)
+    // Фиксируем актуальную версию схемы на любом апдейте
+    localStorage.setItem(SCHEMA_VERSION_KEY, String(CURRENT_SCHEMA_VERSION))
   }, [products])
 
   const api = useMemo(() => ({
