@@ -4,7 +4,8 @@
 }
 
 .site-header {
-  background-color: #6fe7de;
+  /* Градиент как на примере: мягкий бирюзовый сверху к белому снизу */
+  background: linear-gradient(180deg, rgba(113, 230, 217, 1) 0%, rgba(255,255,255,1) 78%);
 }
 
 .header-container {
@@ -13,7 +14,7 @@
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 20px;
+  padding: 8px 20px;
 }
 
 .logo {
@@ -30,53 +31,30 @@
 }
 
 .logo-brand {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #000; /* plain black logo text */
-
-  /* animation / shadow */
+  font-size: 2rem; /* Размер заголовка SMARTECH */
+  font-weight: 800; /* очень жирный */
+  letter-spacing: 0.5px;
+  color: #000; /* чисто чёрный */
   display: inline-block;
-  transition: transform 220ms cubic-bezier(.2,.9,.2,1), text-shadow 220ms ease, opacity 220ms ease;
-  will-change: transform, text-shadow, opacity;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.12), 0 3px 8px rgba(4,10,23,0.06);
-}
-
-.logo-brand:hover,
-.logo-brand:focus {
-  transform: translateY(-4px) scale(1.02);
-  text-shadow: 0 6px 18px rgba(4,10,23,0.14), 0 1px 0 rgba(255,255,255,0.06);
-  opacity: 0.98;
 }
 
 /* Суффикс иноязычного слова/описания */
 .logo-suffix {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #000; /* make suffix black too */
+  font-size: 2rem; /* такой же размер, чтобы слово Company было в одной строке и визуально похоже */
+  font-weight: 600; /* чуть легче, чем SMARTECH */
+  color: #000;
   margin-left: 8px;
-  transition: color 200ms ease, transform 200ms ease;
   display: inline-block;
-}
-
-.logo-suffix:hover,
-.logo-suffix:focus {
-  color: #083b43;
-  transform: translateY(-2px);
 }
 
 /* Стиль подписи платформы */
 .logo-platform {
-  margin-top: 6px;
-  font-size: 1.2rem;
-  color: rgba(0, 0, 0, 0.85); /* темно-teal с лёгкой прозрачностью */
-  font-weight: 800;
-  letter-spacing: 0.6px;
+  margin-top: 2px;
+  font-size: 0.95rem; /* компактнее */
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 600; /* не такой жирный как бренд */
+  letter-spacing: 0.2px;
   text-transform: none;
-  background: none;
-  background-clip: unset;
-  -webkit-background-clip: unset;
-  -webkit-text-fill-color: initial;
 }
 
 /* CSS-переменные для быстрой кастомизации (опционально) */
@@ -100,8 +78,8 @@
 }
 
 .flag {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -224,29 +202,7 @@
 }
 
 /* Стили для отдельных букв логотипа */
-.logo-brand .logo-char {
-  display: inline-block;
-  padding: 0 1px;
-  line-height: 1;
-  transform-origin: center bottom;
-  transition: transform 260ms cubic-bezier(.2,.9,.2,1), text-shadow 260ms ease, opacity 200ms ease;
-  will-change: transform, text-shadow, opacity;
-  color: #000; /* individual letters also black */
-}
-
-/* Hover/focus — буква всплывает и получает тень */
-.logo-brand .logo-char:hover,
-.logo-brand .logo-char:focus {
-  transform: translateY(-8px) scale(1.12);
-  text-shadow: 0 10px 24px rgba(4,10,23,0.16);
-  outline: none;
-}
-
-/* Небольшая задержка при фокусе через клавиатуру — используем индекс, если нужно кастомизировать */
-.logo-brand .logo-char[style] {
-  /* transition-delay может учитывать переменную --i, задаваемую в inline style */
-  transition-delay: calc(var(--i, 0) * 40ms);
-}
+/* Убрали посимвольные эффекты — лого статичное */
 
 @media (prefers-reduced-motion: reduce) {
   .logo-brand .logo-char {

@@ -11,11 +11,7 @@ export default function SiteHeader() {
       <div className="header-container">
         <div className="logo" onClick={() => { window.location.hash = ''; window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
           <h1>
-            <span className="logo-brand" aria-label="SMARTECH">
-              {[...'SMARTECH'].map((ch, i) => (
-                <span key={i} className="logo-char" tabIndex={0} style={{ ['--i']: i }}>{ch}</span>
-              ))}
-            </span>
+            <span className="logo-brand" aria-label="SMARTECH">SMARTECH</span>
             <span className="logo-suffix">{t('header.companySuffix')}</span>
           </h1>
           <p className="logo-platform">{t('header.platform')}</p>
