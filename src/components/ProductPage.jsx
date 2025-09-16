@@ -6,7 +6,7 @@ import { useI18n } from '../i18n/I18nProvider'
 
 export default function ProductPage({ id }) {
   const { products } = useProductsCtx()
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const p = products.find(x => x.id === Number(id))
   const fallback = p?.category === 'ppe' ? imgCt2 : imgCt
   const imgs = (p?.images && p.images.length ? p.images : [fallback])
@@ -53,20 +53,20 @@ export default function ProductPage({ id }) {
               ))}
             </div>
             <div className="main-image-card">
-              <img className="image-open-btn" src={imgs[current]} alt={p.title} onClick={()=> { setLightbox(true) }} />
+              <img className="image-open-btn" src={imgs[current]} alt={p[`title_${lang}`] || p.title} onClick={()=> { setLightbox(true) }} />
             </div>
           </div>
           <button className="quote-btn">{t('productPage.getQuote')}</button>
         </div>
         <div className="product-right">
-          <h1 className="product-title">{p.title}</h1>
+          <h1 className="product-title">{p[`title_${lang}`] || p.title}</h1>
           <div className="product-section-block">
-            <p>{p.description}</p>
+            <p>{p[`description_${lang}`] || p.description}</p>
           </div>
         </div>
       </div>
       {lightbox && (
-        <div className="lightbox" role="dialog" aria-modal="true" aria-label={p.title} onClick={(e)=>{ if(e.target===e.currentTarget) setLightbox(false) }}>
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={p[`title_${lang}`] || p.title} onClick={(e)=>{ if(e.target===e.currentTarget) setLightbox(false) }}>
           <div className="lightbox-content" tabIndex={-1}>
             <button className="lightbox-close" onClick={()=> setLightbox(false)} ref={closeBtnRef} aria-label="Close">✕</button>
             <button className="lightbox-prev" onClick={()=> nav(-1)} aria-label="Previous image">‹</button>

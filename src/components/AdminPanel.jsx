@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useI18n } from '../i18n/I18nProvider'
 import { CATEGORIES } from '../constants'
 import imgCt from '../../img/imgCt.png'
 import imgCt2 from '../../img/imgCt2.png'
@@ -6,7 +7,8 @@ import { useProductsCtx } from '../context/ProductsContext'
 
 export default function AdminPanel({ onLogout }) {
   const { products, addProduct, updateProduct, deleteProduct } = useProductsCtx()
-  const emptyForm = { id: null, title: '', description: '', category: CATEGORIES[0].value, images: [] }
+  const { lang } = useI18n()
+  const emptyForm = { id: null, title_en: '', title_es: '', description_en: '', description_es: '', category: CATEGORIES[0].value, images: [] }
   const [form, setForm] = useState(emptyForm)
   const [isEditing, setIsEditing] = useState(false)
 
@@ -35,7 +37,15 @@ export default function AdminPanel({ onLogout }) {
   }
 
   function startEdit(p) {
-    setForm({ id: p.id, title: p.title, description: p.description, category: p.category, images: p.images || [] })
+    setForm({
+      id: p.id,
+      title_en: p.title_en || p.title || '',
+      title_es: p.title_es || '',
+      description_en: p.description_en || p.description || '',
+      description_es: p.description_es || '',
+      category: p.category,
+      images: p.images || []
+    })
     setIsEditing(true)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -47,11 +57,27 @@ export default function AdminPanel({ onLogout }) {
 
   function onSubmit(e) {
     e.preventDefault()
-  if (!form.title.trim()) { alert('Enter a title'); return }
-  if (!form.description.trim()) { alert('Enter a description'); return }
+  const titleCur = form[`title_${lang}`].trim()
+  const descCur = form[`description_${lang}`].trim()
+  if (!titleCur) { alert('Enter a title'); return }
+  if (!descCur) { alert('Enter a description'); return }
   if (!CATEGORIES.some(c => c.value === form.category)) { alert('Category is not selected'); return }
 
-    const payload = { title: form.title.trim(), description: form.description.trim(), category: form.category, images: form.images || [] }
+    const payload = {
+      // сохраняем текущую локаль обязательно
+      [`title_${lang}`]: titleCur,
+      [`description_${lang}`]: descCur,
+      // сохраняем вторую локаль если введена
+      title_en: form.title_en?.trim() || undefined,
+      title_es: form.title_es?.trim() || undefined,
+      description_en: form.description_en?.trim() || undefined,
+      description_es: form.description_es?.trim() || undefined,
+      // фолбэкные поля для обратной совместимости
+      title: titleCur,
+      description: descCur,
+      category: form.category,
+      images: form.images || []
+    }
     if (isEditing && form.id != null) {
       updateProduct(form.id, payload)
     } else {
@@ -74,8 +100,8 @@ export default function AdminPanel({ onLogout }) {
       <form onSubmit={onSubmit} style={{ background: '#fff', border: '1px solid #eee', borderRadius: 12, padding: 16, boxShadow: '0 5px 15px rgba(0,0,0,0.05)', marginBottom: 24 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           <div>
-            <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Title</label>
-            <input name="title" value={form.title} onChange={handleInput} placeholder="For example: Card 7" style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }} />
+            <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Title (EN)</label>
+            <input name="title_en" value={form.title_en} onChange={handleInput} placeholder="For example: Card 7" style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }} />
           </div>
           <div>
             <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Category</label>
@@ -88,8 +114,19 @@ export default function AdminPanel({ onLogout }) {
         </div>
 
         <div style={{ marginTop: 16 }}>
-          <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Description</label>
-          <textarea name="description" value={form.description} onChange={handleInput} rows={4} placeholder="Text description" style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd', resize: 'vertical' }} />
+          <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Description (EN)</label>
+          <textarea name="description_en" value={form.description_en} onChange={handleInput} rows={4} placeholder="Text description" style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd', resize: 'vertical' }} />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
+          <div>
+            <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Title (ES)</label>
+            <input name="title_es" value={form.title_es} onChange={handleInput} placeholder="Por ejemplo: Tarjeta 7" style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd' }} />
+          </div>
+          <div>
+            <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Description (ES)</label>
+            <textarea name="description_es" value={form.description_es} onChange={handleInput} rows={4} placeholder="Texto de descripción" style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #ddd', resize: 'vertical' }} />
+          </div>
         </div>
 
         <div style={{ marginTop: 16 }}>
@@ -122,9 +159,9 @@ export default function AdminPanel({ onLogout }) {
               <img src={(p.images && p.images[0]) || (p.category === 'ppe' ? imgCt2 : imgCt)} alt={p.title} style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee' }} />
             </div>
             <div>
-              <div style={{ fontWeight: 700 }}>{p.title}</div>
+              <div style={{ fontWeight: 700 }}>{p.title_en || p.title}</div>
               <div style={{ color: '#666', fontSize: 14, marginTop: 4 }}>{(CATEGORIES.find(c => c.value === p.category)?.label) || p.category}</div>
-              <div style={{ color: '#333', fontSize: 14, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{p.description}</div>
+              <div style={{ color: '#333', fontSize: 14, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{p.description_en || p.description}</div>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button className="btn btn-white" onClick={() => startEdit(p)}>Edit</button>
@@ -136,9 +173,4 @@ export default function AdminPanel({ onLogout }) {
     </div>
   )
 
-  function startEdit(p) {
-    setForm({ id: p.id, title: p.title, description: p.description, category: p.category, images: p.images || [] })
-    setIsEditing(true)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 }
