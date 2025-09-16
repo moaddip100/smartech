@@ -32,10 +32,20 @@
 
 .logo-brand {
   font-size: 2rem; /* Размер заголовка SMARTECH */
-  font-weight: 800; /* очень жирный */
+  font-weight: 800; /* базово жирный — уточним ниже частями */
   letter-spacing: 0.5px;
   color: #000; /* чисто чёрный */
   display: inline-block;
+}
+
+/* Часть SMAR — обычная, без жирности */
+.logo-brand-smar {
+  font-weight: 400; /* normal */
+}
+
+/* Часть TECH — жирная */
+.logo-brand-tech {
+  font-weight: 800; /* extra bold */
 }
 
 /* Суффикс иноязычного слова/описания */
