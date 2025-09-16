@@ -22,7 +22,15 @@ function loadProducts() {
     if (!raw) return seedProducts()
     const parsed = JSON.parse(raw)
     if (!Array.isArray(parsed)) return seedProducts()
-    return parsed
+    // Миграция: переносим базовые поля в локализованные, если их нет
+    const migrated = parsed.map(p => {
+      const title_en = p.title_en || p.title || ''
+      const description_en = p.description_en || p.description || ''
+      const images = Array.isArray(p.images) ? p.images : (p.images ? [p.images] : [])
+      return { ...p, title_en, description_en, title: title_en, description: description_en, images }
+    })
+    // Возвращаем уже мигрированные данные
+    return migrated
   } catch {
     return seedProducts()
   }
