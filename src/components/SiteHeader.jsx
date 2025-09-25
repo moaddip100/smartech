@@ -4,7 +4,8 @@ import iconEng from '../../img/icon/iconEng.png'
 import { useI18n } from '../i18n/I18nProvider'
 
 export default function SiteHeader() {
-  const [open, setOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
   const { lang, setLang, t } = useI18n()
   return (
     <header className="site-header">
@@ -20,31 +21,31 @@ export default function SiteHeader() {
           <p className="logo-platform">{t('header.platform')}</p>
         </div>
         <button
-          className={`mobile-toggle ${open ? 'open' : ''}`}
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          aria-expanded={open}
-          onClick={() => setOpen(v => !v)}
+          className={`mobile-toggle ${menuOpen ? 'open' : ''}`}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(v => { const next = !v; if (!next) setLangOpen(false); return next })}
         >
           <span className="hamburger"></span>
         </button>
-        <div className={`header-actions ${open ? 'open' : ''}`} onClick={() => setOpen(false)}>
+        <div className={`header-actions ${menuOpen ? 'open' : ''}`} onClick={() => { setMenuOpen(false); setLangOpen(false); }}>
           <div className="lang-wrapper">
             <button
               className="lang-toggle"
               aria-haspopup="true"
-              aria-expanded={open}
-              onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }}
+              aria-expanded={langOpen}
+              onClick={(e) => { e.stopPropagation(); setLangOpen(v => !v); }}
             >
               {lang === 'en' ? 'English' : 'Español'}
               <span className="caret">▾</span>
             </button>
-            {open && (
+            {langOpen && (
               <div className="lang-dropdown" role="menu" onClick={e => e.stopPropagation()}>
-                <div className={`lang-option ${lang === 'en' ? 'active' : ''}`} role="menuitem" onClick={() => { setLang('en'); setOpen(false); }}>
+                <div className={`lang-option ${lang === 'en' ? 'active' : ''}`} role="menuitem" onClick={() => { setLang('en'); setLangOpen(false); }}>
                   <span className="lang-radio" aria-hidden></span>
                   <span className="lang-label">English</span>
                 </div>
-                <div className={`lang-option ${lang === 'es' ? 'active' : ''}`} role="menuitem" onClick={() => { setLang('es'); setOpen(false); }}>
+                <div className={`lang-option ${lang === 'es' ? 'active' : ''}`} role="menuitem" onClick={() => { setLang('es'); setLangOpen(false); }}>
                   <span className="lang-radio" aria-hidden></span>
                   <span className="lang-label">Español</span>
                 </div>
