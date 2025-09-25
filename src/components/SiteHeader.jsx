@@ -28,8 +28,29 @@ export default function SiteHeader() {
           <span className="hamburger"></span>
         </button>
         <div className={`header-actions ${open ? 'open' : ''}`} onClick={() => setOpen(false)}>
-          <img src={iconSpa} alt="Spain flag" className={`flag ${lang==='es'?'active':''}`} style={{ cursor: 'pointer' }} onClick={() => setLang('es')} aria-label="Switch to Spanish" title="Español" />
-          <img src={iconEng} alt="UK flag" className={`flag ${lang==='en'?'active':''}`} style={{ cursor: 'pointer' }} onClick={() => setLang('en')} aria-label="Switch to English" title="English" />
+          <div className="lang-wrapper">
+            <button
+              className="lang-toggle"
+              aria-haspopup="true"
+              aria-expanded={open}
+              onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }}
+            >
+              {lang === 'en' ? 'English' : 'Español'}
+              <span className="caret">▾</span>
+            </button>
+            {open && (
+              <div className="lang-dropdown" role="menu" onClick={e => e.stopPropagation()}>
+                <div className={`lang-option ${lang === 'en' ? 'active' : ''}`} role="menuitem" onClick={() => { setLang('en'); setOpen(false); }}>
+                  <span className="lang-radio" aria-hidden></span>
+                  <span className="lang-label">English</span>
+                </div>
+                <div className={`lang-option ${lang === 'es' ? 'active' : ''}`} role="menuitem" onClick={() => { setLang('es'); setOpen(false); }}>
+                  <span className="lang-radio" aria-hidden></span>
+                  <span className="lang-label">Español</span>
+                </div>
+              </div>
+            )}
+          </div>
           <button className="btn btn-yellow" onClick={() => alert('Contact supplier')}>{t('header.contactSupplier')}</button>
           <button className="btn btn-white" onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth'})}>{t('header.contacts')}</button>
         </div>

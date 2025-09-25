@@ -87,6 +87,40 @@
   gap: 15px;
 }
 
+/* Language selector (header) */
+.lang-wrapper { position: relative; }
+.lang-toggle {
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
+  font-size: 16px;
+  color: #083b43;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.lang-toggle .caret { font-size: 14px; margin-left: 6px; }
+
+.lang-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 14px;
+  z-index: 60;
+}
+.lang-dropdown::before { content: ''; position: absolute; right: 12px; top: -6px; width: 12px; height: 12px; background: #fff; transform: rotate(45deg); box-shadow: -2px -2px 4px rgba(0,0,0,0.04); }
+.lang-option { display: flex; align-items: center; gap: 12px; padding: 10px 6px; cursor: pointer; border-radius: 6px; }
+.lang-option:hover { background: rgba(5,20,20,0.03); }
+.lang-option.active { font-weight: 700; }
+.lang-radio { width: 18px; height: 18px; border-radius: 50%; border: 3px solid #ff7a00; display: inline-block; box-sizing: border-box; }
+.lang-option:not(.active) .lang-radio { border-color: #ccc; }
+.lang-label { font-size: 16px; color: #083b43; }
+
 .flag {
   width: 36px;
   height: 36px;
