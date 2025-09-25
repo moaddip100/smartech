@@ -92,15 +92,14 @@
 .lang-toggle {
   background: transparent;
   border: none;
-  padding: 8px 10px;
+  padding: 2px 10px;
   font-size: 16px;
   color: #083b43;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
 }
-.lang-toggle .caret { font-size: 14px; margin-left: 6px; }
+.lang-toggle .caret { font-size: 20px; margin-left: 6px; }
 
 .lang-dropdown {
   position: absolute;
