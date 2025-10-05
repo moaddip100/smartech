@@ -26,7 +26,9 @@ export default function HeroSection() {
           <button className="btn btn-white hero-button_secondary" onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth'})}>{t('hero.contacts')}</button>
         </div>
         <div className="hero-image">
-          <img src={images[idx]} alt="" loading="lazy" />
+          {images.map((src, i) => (
+            <img key={i} src={src} alt="" loading="lazy" className={i === idx ? 'active' : ''} />
+          ))}
         </div>
       </div>
     </section>
