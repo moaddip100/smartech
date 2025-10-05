@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import prevImg from '../../img/prevImg.png'
+import photo1 from '../../img/photo_2025-08-27_12-01-07.jpg'
+import photo2 from '../../img/photo_2025-08-27_12-01-09.jpg'
 import { useI18n } from '../i18n/I18nProvider'
 
 export default function HeroSection() {
   const { t } = useI18n()
+  const images = [prevImg, photo1, photo2]
+  const [idx, setIdx] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIdx(i => (i + 1) % images.length)
+    }, 1000)
+    return () => clearInterval(id)
+  }, [])
   return (
     <section className="hero-section">
       <div className="hero">
@@ -15,7 +26,7 @@ export default function HeroSection() {
           <button className="btn btn-white hero-button_secondary" onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth'})}>{t('hero.contacts')}</button>
         </div>
         <div className="hero-image">
-          <img src={prevImg} alt="" loading="lazy" />
+          <img src={images[idx]} alt="" loading="lazy" />
         </div>
       </div>
     </section>
