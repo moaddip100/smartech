@@ -12,7 +12,7 @@ export default function HeroSection() {
   useEffect(() => {
     const id = setInterval(() => {
       setIdx(i => (i + 1) % images.length)
-    }, 1000)
+    }, 2000)
     return () => clearInterval(id)
   }, [])
   return (
