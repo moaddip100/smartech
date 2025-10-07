@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 
 export default function ContactModal({ open, onClose }) {
   const [values, setValues] = useState({
@@ -45,11 +46,18 @@ export default function ContactModal({ open, onClose }) {
     alert('Thank you! Your message was submitted.')
   }
 
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [open])
+
   if (!open) return null
 
   const errs = validate()
 
-  return (
+  const modal = (
     <div className="contact-modal-backdrop" role="dialog" aria-modal="true">
       <div className="contact-modal">
         <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
@@ -105,4 +113,6 @@ export default function ContactModal({ open, onClose }) {
       </div>
     </div>
   )
+
+  return ReactDOM.createPortal(modal, document.body)
 }
