@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
+import '../../styles/ContactModal.css'
 
 export default function ContactModal({ open, onClose }) {
   const [values, setValues] = useState({
