@@ -31,7 +31,7 @@ export default function SiteHeader() {
         <div className={`header-actions ${menuOpen ? 'open' : ''}`} onClick={() => { setMenuOpen(false); setLangOpen(false); }}>
           <div className="lang-wrapper">
             <button
-              className="lang-toggle"
+              className="btn btn-white lang-toggle"
               aria-haspopup="true"
               aria-expanded={langOpen}
               onClick={(e) => { e.stopPropagation(); setLangOpen(v => !v); }}
