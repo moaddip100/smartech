@@ -10,6 +10,7 @@ import linkedinIcon from '../../img/icon/LinkedIn.png'
 export default function Footer() {
   return (
     <footer className="footer">
+      <h2>Our contacts ans social media</h2>
       <div className="social-icons">
         <div className="social-icon"><a href="mailto:order@smartech.prof" aria-label="Send email to ruslanlav547@gmail.com"><img loading="lazy" width="40" height="40" src={emailIcon} alt="Email" /></a></div>
         <div className="social-icon"><a href="https://wa.me/995597753355" aria-label="Chat on WhatsApp" target="_blank" rel="noopener noreferrer"><img loading="lazy" width="40" height="40" src={whatsAppIcon} alt="WhatsApp" /></a></div>
