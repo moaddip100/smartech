@@ -7,6 +7,14 @@ export default function SiteHeader({ onOpenContact }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
   const { lang, setLang, t } = useI18n()
+  const openContactClick = () => {
+    if (typeof onOpenContact === 'function') {
+      onOpenContact()
+    } else {
+      // fallback: emit a global event so other hosts can listen and open the modal
+      window.dispatchEvent(new CustomEvent('smartech:openContact'))
+    }
+  }
   return (
     <header className="site-header">
       <div className="header-container">
@@ -52,7 +60,7 @@ export default function SiteHeader({ onOpenContact }) {
               </div>
             )}
           </div>
-          <button className="btn btn-yellow" onClick={() => typeof onOpenContact === 'function' ? onOpenContact() : alert('Contact supplier')}>{t('header.contactSupplier')}</button>
+          <button className="btn btn-yellow" onClick={openContactClick}>{t('header.contactSupplier')}</button>
           <button className="btn btn-white" onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth'})}>{t('header.contacts')}</button>
         </div>
       </div>

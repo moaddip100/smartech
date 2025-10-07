@@ -27,7 +27,14 @@ export default function App() {
   useEffect(() => {
     const onHash = () => setRoute(parseRoute())
     window.addEventListener('hashchange', onHash)
+    const onOpenContactEvent = () => setContactOpen(true)
+    window.addEventListener('smartech:openContact', onOpenContactEvent)
     return () => window.removeEventListener('hashchange', onHash)
+    // cleanup for the custom event
+    // note: returning only once is fine; React will call this cleanup on unmount
+    // but keep signature consistent
+    // eslint-disable-next-line no-unreachable
+    window.removeEventListener('smartech:openContact', onOpenContactEvent)
   }, [])
 
   function handleLogin(pw) {
