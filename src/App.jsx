@@ -3,6 +3,7 @@ import { ADMIN_PASSWORD, AUTH_KEY } from './constants'
 import { ProductsProvider } from './context/ProductsContext'
 import SiteHeader from './components/SiteHeader'
 import Footer from './components/Footer'
+import ContactModal from './components/ContactModal'
 import AdminHeader from './components/AdminHeader'
 import AdminFooter from './components/AdminFooter'
 import ProductPage from './components/ProductPage'
@@ -21,6 +22,7 @@ export default function App() {
   }
   const [route, setRoute] = useState(() => parseRoute())
   const [isAuthed, setIsAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === '1')
+  const [contactOpen, setContactOpen] = useState(false)
 
   useEffect(() => {
     const onHash = () => setRoute(parseRoute())
@@ -58,13 +60,14 @@ export default function App() {
           </>
         ) : (
           <>
-            <SiteHeader />
+            <SiteHeader onOpenContact={() => setContactOpen(true)} />
             {route.name === 'product' ? (
               <ProductPage id={route.id} />
             ) : (
               <HomePage />
             )}
             <Footer />
+            <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
           </>
         )}
       </div>

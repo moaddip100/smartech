@@ -3,7 +3,7 @@ import iconSpa from '../../img/icon/iconSpa.png'
 import iconEng from '../../img/icon/iconEng.png'
 import { useI18n } from '../i18n/I18nProvider'
 
-export default function SiteHeader() {
+export default function SiteHeader({ onOpenContact }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
   const { lang, setLang, t } = useI18n()
@@ -52,7 +52,7 @@ export default function SiteHeader() {
               </div>
             )}
           </div>
-          <button className="btn btn-yellow" onClick={() => alert('Contact supplier')}>{t('header.contactSupplier')}</button>
+          <button className="btn btn-yellow" onClick={() => typeof onOpenContact === 'function' ? onOpenContact() : alert('Contact supplier')}>{t('header.contactSupplier')}</button>
           <button className="btn btn-white" onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth'})}>{t('header.contacts')}</button>
         </div>
       </div>
