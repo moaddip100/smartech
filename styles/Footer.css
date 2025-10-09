@@ -24,12 +24,15 @@
   height: 40px;
   object-fit: cover;
   border-radius: 8px;
-  transition: transform 180ms ease, box-shadow 180ms ease;
-  background-color: transparent;
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 120ms ease;
+  background-color: rgba(255,255,255,0.9);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  opacity: 1; /* make icons fully opaque by default */
 }
 
 .social-icon img:hover {
   transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
 }
 
 .copyright {
