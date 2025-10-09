@@ -22,7 +22,7 @@ export default function HeroSection() {
           <p>
             {t('hero.paragraph')}
           </p>
-          <button className="btn btn-yellow hero-button">{t('hero.contactSupplier')}</button>
+          <button className="btn btn-yellow hero-button" onClick={() => window.dispatchEvent(new CustomEvent('smartech:openContact'))}>{t('hero.contactSupplier')}</button>
           <button className="btn btn-white hero-button_secondary" onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth'})}>{t('hero.contacts')}</button>
         </div>
         <div className="hero-image">

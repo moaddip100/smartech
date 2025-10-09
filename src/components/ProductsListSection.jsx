@@ -16,7 +16,7 @@ export default function ProductsListSection({ title, id, products }) {
                 <h2>{p[`title_${lang}`] || p.title}</h2>
                 <p>{p[`description_${lang}`] || p.description}</p>
                 <div className="card-buttons">
-                  <button className="btn btn-yellow">{t('products.contactSupplier')}</button>
+                  <button className="btn btn-yellow" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent('smartech:openContact')) }}>{t('products.contactSupplier')}</button>
                   <button className="btn btn-orange">{t('products.moreInfo')}</button>
                 </div>
               </div>
