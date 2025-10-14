@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # Если файл или директория существуют — отдать как есть
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  # Иначе — вернуть index.html (для client-side routing)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Отключаем листинг директорий
+Options -Indexes

@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { LOCK_KEY, MAX_ATTEMPTS, LOCK_MINUTES } from '../constants'
+import { createClient } from '@supabase/supabase-js'
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+const SUPABASE_AUTH_ENABLED = import.meta.env.VITE_SUPABASE_AUTH_ENABLED === 'true'
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || ''
+const useSupabaseAuth = !!(SUPABASE_AUTH_ENABLED && SUPABASE_URL && SUPABASE_KEY)
+const supabase = useSupabaseAuth ? createClient(SUPABASE_URL, SUPABASE_KEY) : null
 
 export default function AdminLogin({ onSubmit }) {
   const [password, setPassword] = useState('')
+  const [email, setEmail] = useState(ADMIN_EMAIL)
   const [error, setError] = useState('')
   const [show, setShow] = useState(false)
   const [attempts, setAttempts] = useState(0)
@@ -39,20 +48,37 @@ export default function AdminLogin({ onSubmit }) {
       setError(`Too many attempts. Try again in ${mm}:${ss}`)
       return
     }
+    if (useSupabaseAuth) {
+      // Supabase auth flow — используем email из env или введённый
+      const userEmail = ADMIN_EMAIL || email
+      if (!userEmail) { setError('Email is required for Supabase auth'); return }
+      supabase.auth.signInWithPassword({ email: userEmail, password }).then(res => {
+        if (res.error) {
+          handleFailed()
+        } else {
+          onSubmit(true)
+        }
+      }).catch(() => handleFailed())
+      return
+    }
+
     const ok = onSubmit(password)
     if (!ok) {
-      const nextAttempts = attempts + 1
-      if (nextAttempts >= MAX_ATTEMPTS) {
-        const until = Date.now() + LOCK_MINUTES * 60 * 1000
-        setAttempts(0)
-        setLockedUntil(until)
-        persist(0, until)
-        setError(`Too many attempts. Try again in ${LOCK_MINUTES} min.`)
-      } else {
-        setAttempts(nextAttempts)
-        persist(nextAttempts, 0)
-        setError('Incorrect password')
+      const handleFailed = () => {
+        const nextAttempts = attempts + 1
+        if (nextAttempts >= MAX_ATTEMPTS) {
+          const until = Date.now() + LOCK_MINUTES * 60 * 1000
+          setAttempts(0)
+          setLockedUntil(until)
+          persist(0, until)
+          setError(`Too many attempts. Try again in ${LOCK_MINUTES} min.`)
+        } else {
+          setAttempts(nextAttempts)
+          persist(nextAttempts, 0)
+          setError('Incorrect password')
+        }
       }
+      handleFailed()
     } else {
       setAttempts(0)
       setLockedUntil(0)
@@ -111,6 +137,12 @@ export default function AdminLogin({ onSubmit }) {
         <p style={sub}>Enter password to access</p>
         <form onSubmit={submit}>
           <label style={label}>Password</label>
+          {useSupabaseAuth && !ADMIN_EMAIL ? (
+            <>
+              <label style={label}>Email</label>
+              <input placeholder="admin@example.com" value={email} onChange={e => setEmail(e.target.value)} style={{ ...input, marginBottom: 8 }} />
+            </>
+          ) : null}
           <div style={row}>
             <input type={show ? 'text' : 'password'} placeholder="Enter password" value={password} onChange={e => setPassword(e.target.value)} style={input} disabled={isLocked} />
             <button type="button" onClick={() => setShow(s => !s)} style={toggle}>{show ? 'Hide' : 'Show'}</button>

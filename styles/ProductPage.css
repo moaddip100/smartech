@@ -11,7 +11,7 @@
   border-radius: 10px;
   box-shadow: 0 6px 18px rgba(4,10,23,0.06);
 }
-
+ 
 .back-link {
   display: inline-block;
   margin-bottom: 12px;
@@ -131,10 +131,15 @@
 
 @media (max-width: 480px) {
   .product-page { padding: 20px 12px; }
+  /* Reduce inner padding to remove right-side extra space */
+  .product-page .product-page-inner { padding: 12px; }
+  .product-grid { gap: 16px; }
   .product-title { font-size: 26px; }
-  .left-visuals { flex-direction: column; align-items: center; }
-  .thumbs { flex-direction: row; gap: 8px; }
-  .main-image-card img { width: 220px; }
+  .left-visuals { flex-direction: column; align-items: center; width: 100%; }
+  .thumbs { flex-direction: row; gap: 8px; justify-content: center; }
+  /* Make the image card full-width and remove forced height to eliminate bottom gap */
+  .main-image-card { width: 100%; padding: 12px; min-height: auto; }
+  .main-image-card img { width: 100%; max-width: 100%; height: auto; }
   .quote-btn { width: 100%; padding: 12px; }
   .product-section-block { padding: 12px 0; }
 }

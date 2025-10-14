@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { ADMIN_PASSWORD, AUTH_KEY } from './constants'
+import { createClient } from '@supabase/supabase-js'
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+const SUPABASE_AUTH_ENABLED = import.meta.env.VITE_SUPABASE_AUTH_ENABLED === 'true'
+const supabase = SUPABASE_AUTH_ENABLED && SUPABASE_URL && SUPABASE_KEY ? createClient(SUPABASE_URL, SUPABASE_KEY) : null
 import { ProductsProvider } from './context/ProductsContext'
 import SiteHeader from './components/SiteHeader'
 import Footer from './components/Footer'
@@ -21,7 +27,10 @@ export default function App() {
     return { name: 'home' }
   }
   const [route, setRoute] = useState(() => parseRoute())
-  const [isAuthed, setIsAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === '1')
+  const [isAuthed, setIsAuthed] = useState(() => {
+    if (SUPABASE_AUTH_ENABLED) return false
+    return sessionStorage.getItem(AUTH_KEY) === '1'
+  })
   const [contactOpen, setContactOpen] = useState(false)
 
   useEffect(() => {
@@ -37,19 +46,50 @@ export default function App() {
     window.removeEventListener('smartech:openContact', onOpenContactEvent)
   }, [])
 
-  function handleLogin(pw) {
-    if (pw === ADMIN_PASSWORD) {
-      sessionStorage.setItem(AUTH_KEY, '1')
+  async function handleLogin(payload) {
+    if (!SUPABASE_AUTH_ENABLED) {
+      const pw = payload
+      if (pw === ADMIN_PASSWORD) {
+        sessionStorage.setItem(AUTH_KEY, '1')
+        setIsAuthed(true)
+        return true
+      }
+      return false
+    }
+    // Supabase auth: payload is boolean success from AdminLogin
+    if (payload === true) {
       setIsAuthed(true)
       return true
     }
     return false
   }
-  function handleLogout() {
+
+  async function handleLogout() {
+    if (SUPABASE_AUTH_ENABLED && supabase) {
+      await supabase.auth.signOut()
+    }
     sessionStorage.removeItem(AUTH_KEY)
     setIsAuthed(false)
     window.location.hash = ''
   }
+
+  // Если Supabase Auth включён — проверяем текущую сессию и подписываемся на изменения
+  useEffect(() => {
+    if (!SUPABASE_AUTH_ENABLED || !supabase) return
+    let mounted = true
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!mounted) return
+      if (session) setIsAuthed(true)
+    })
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) setIsAuthed(true)
+      else setIsAuthed(false)
+    })
+    return () => {
+      mounted = false
+      sub?.subscription?.unsubscribe?.()
+    }
+  }, [])
 
   if (route.name === 'admin' && !isAuthed) {
     // Страница входа: доступ только по прямой ссылке, без шапки/футера
