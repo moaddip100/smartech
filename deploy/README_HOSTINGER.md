@@ -88,5 +88,39 @@ VITE_ADMIN_EMAIL=admin@example.com # опционально, если хотит
   - Для безопасной загрузки файлов используйте Supabase Storage и правила доступа (private/public) и подпись URL при необходимости.
 
 Storage
-- Для изображений используйте Supabase Storage: создайте бакет `public` и настройте публичный доступ для чтения (если хотите публичные URL). Скрипт в приложении загрузит base64-изображения в `public/`.
+- Для изображений используйте Supabase Storage: создайте бакет и настройте публичный доступ для чтения (если хотите публичные URL).
+- Не используйте имя `public` — это может конфликтовать с зарезервированными именами; рекомендуется назвать бакет, например, `product-images`.
+- Если вы выбрали имя бакета отличное от `public`, укажите его в переменных окружения как `SUPABASE_BUCKET` (для импортного скрипта) и `VITE_SUPABASE_BUCKET` (для встраивания в клиент при сборке):
+
+```text
+SUPABASE_BUCKET=product-images
+VITE_SUPABASE_BUCKET=product-images
+```
+
+Скрипт импорта и приложение по умолчанию используют бакет `product-images` если переменные не заданы.
+
+Экспорт существующих продуктов (localStorage) и импорт в Supabase
+
+1) Экспорт из браузера
+- Откройте сайт в браузере, откройте DevTools → Console.
+- Выполните:
+
+```javascript
+copy(localStorage.getItem('smartech_products_v1'))
+```
+
+Это скопирует JSON с продуктами в буфер обмена. Вставьте в файл `products.json` локально.
+
+2) Запуск импорта в Supabase (локально)
+- Установите зависимости: `npm i @supabase/supabase-js`
+- Выполните (замените переменные):
+
+```powershell
+setx SUPABASE_URL "https://your-project.supabase.co"
+setx SUPABASE_SERVICE_KEY "your-service-role-key"
+node scripts/import-to-supabase.js .\products.json
+```
+
+3) После импорта проверьте таблицу `products` в Supabase Studio и обновите сайт (сборка не нужна для чтения данных, только для вшитых env при build).
+
 

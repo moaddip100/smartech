@@ -12,6 +12,7 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 const useSupabase = !!(SUPABASE_URL && SUPABASE_KEY)
 const supabase = useSupabase ? createClient(SUPABASE_URL, SUPABASE_KEY) : null
+const SUPABASE_BUCKET = import.meta.env.VITE_SUPABASE_BUCKET || 'product-images'
 
 function seedProducts() {
   // initial 6 products (3 building, 3 ppe)
@@ -92,13 +93,14 @@ async function uploadImageToStorage(base64data, fileName) {
       // если не base64 — возвращаем null
       return null
     }
-    const path = `public/${fileName}`
-    const { error: uploadErr } = await supabase.storage.from('public').upload(path, buffer, { contentType: mime, upsert: true })
+    const path = `products/${fileName}`
+    const blob = new Blob([buffer], { type: mime })
+    const { error: uploadErr } = await supabase.storage.from(SUPABASE_BUCKET).upload(path, blob, { contentType: mime, upsert: true })
     if (uploadErr) {
       console.error('Storage upload error', uploadErr)
       return null
     }
-    const { data: urlData, error: urlErr } = supabase.storage.from('public').getPublicUrl(path)
+    const { data: urlData, error: urlErr } = supabase.storage.from(SUPABASE_BUCKET).getPublicUrl(path)
     if (urlErr) {
       console.error('Get public url error', urlErr)
       return null
@@ -159,43 +161,76 @@ export function ProductsProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    saveProducts(products)
-    // Фиксируем актуальную версию схемы на любом апдейте
-    localStorage.setItem(SCHEMA_VERSION_KEY, String(CURRENT_SCHEMA_VERSION))
-    // Синхронизируемся с Supabase опционально
-    if (useSupabase) {
-      // не дожидаемся — fire-and-forget
-      (async () => {
-        // Для каждой product проверяем images — если это base64, загружаем и заменяем на ссылку
-        const patched = await Promise.all(products.map(async p => {
-          if (!p.images || !p.images.length) return p
-          const imgs = await Promise.all(p.images.map(async (img, idx) => {
-            if (typeof img === 'string' && img.startsWith('data:')) {
-              const fn = `product-${p.id || 'new'}-${Date.now()}-${idx}.png`
-              const url = await uploadImageToStorage(img, fn)
-              return url || img
-            }
-            return img
-          }))
-          return { ...p, images: imgs }
-        }))
-        await syncToSupabase(patched)
-      })()
+    if (!useSupabase) {
+      saveProducts(products)
+      localStorage.setItem(SCHEMA_VERSION_KEY, String(CURRENT_SCHEMA_VERSION))
     }
   }, [products])
 
   const api = useMemo(() => ({
     products,
-    addProduct: (p) => {
-      const newP = { ...p, id: nextId }
-      setProducts(prev => [...prev, newP])
-      setNextId(id => id + 1)
+    addProduct: async (p) => {
+      if (useSupabase) {
+        // upload base64 images if any, then insert
+        const imgs = Array.isArray(p.images) ? await Promise.all(p.images.map(async (img, idx) => {
+          if (typeof img === 'string' && img.startsWith('data:')) {
+            const fn = `product-new-${Date.now()}-${idx}.png`
+            const url = await uploadImageToStorage(img, fn)
+            return url || img
+          }
+          return img
+        })) : []
+        const payload = { ...p, images: imgs }
+        const { data, error } = await supabase.from('products').insert(payload).select().single()
+        if (!error && data) {
+          setProducts(prev => [...prev, data])
+        } else {
+          console.error('Supabase insert error', error)
+        }
+        return { data, error }
+      } else {
+        const newP = { ...p, id: nextId }
+        setProducts(prev => [...prev, newP])
+        setNextId(id => id + 1)
+        return { data: newP, error: null }
+      }
     },
-    updateProduct: (id, patch) => {
-      setProducts(prev => prev.map(p => (p.id === id ? { ...p, ...patch } : p)))
+    updateProduct: async (id, patch) => {
+      if (useSupabase) {
+        const imgs = Array.isArray(patch.images) ? await Promise.all(patch.images.map(async (img, idx) => {
+          if (typeof img === 'string' && img.startsWith('data:')) {
+            const fn = `product-${id}-${Date.now()}-${idx}.png`
+            const url = await uploadImageToStorage(img, fn)
+            return url || img
+          }
+          return img
+        })) : undefined
+        const payload = imgs ? { ...patch, images: imgs } : { ...patch }
+        const { data, error } = await supabase.from('products').update(payload).eq('id', id).select().single()
+        if (!error && data) {
+          setProducts(prev => prev.map(p => (p.id === id ? data : p)))
+        } else {
+          console.error('Supabase update error', error)
+        }
+        return { data, error }
+      } else {
+        setProducts(prev => prev.map(p => (p.id === id ? { ...p, ...patch } : p)))
+        return { data: true, error: null }
+      }
     },
-    deleteProduct: (id) => {
-      setProducts(prev => prev.filter(p => p.id !== id))
+    deleteProduct: async (id) => {
+      if (useSupabase) {
+        const { error } = await supabase.from('products').delete().eq('id', id)
+        if (error) {
+          console.error('Supabase delete error', error)
+          return { error }
+        }
+        setProducts(prev => prev.filter(p => p.id !== id))
+        return { error: null }
+      } else {
+        setProducts(prev => prev.filter(p => p.id !== id))
+        return { error: null }
+      }
     },
   }), [products, nextId])
 

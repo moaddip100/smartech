@@ -24,7 +24,8 @@ Write-Host "Буду загружать файлы из: $localPath -> ftp://$ft
 # Рекурсивная загрузка файлов через базовый FTPWebRequest
 function Upload-File {
     param($localFile, $remoteFile)
-
+    # Ensure remoteFile starts with '/'
+    if (-not $remoteFile.StartsWith('/')) { $remoteFile = '/' + $remoteFile }
     $uri = "ftp://$ftpHost$remoteFile"
     $request = [System.Net.FtpWebRequest]::Create($uri)
     $request.Method = [System.Net.WebRequestMethods+Ftp]::UploadFile
@@ -45,11 +46,22 @@ function Ensure-RemoteDir {
     param($dirPath)
     # Попытка создать директорию (если уже есть — сервер вернёт ошибку, которую игнорируем)
     try {
-        $uri = "ftp://$ftpHost$dirPath"
-        $req = [System.Net.FtpWebRequest]::Create($uri)
-        $req.Method = [System.Net.WebRequestMethods+Ftp]::MakeDirectory
-        $req.Credentials = New-Object System.Net.NetworkCredential($ftpUser, $ftpPass)
-        $req.GetResponse() | Out-Null
+        if (-not $dirPath.StartsWith('/')) { $dirPath = '/' + $dirPath }
+        # Создаём сегменты пути по очереди: /public_html/dir1/dir2/
+        $parts = $dirPath.TrimStart('/').Split('/') | Where-Object { $_ -ne '' }
+        $acc = ''
+        foreach ($p in $parts) {
+            $acc = $acc + '/' + $p
+            $uri = "ftp://$ftpHost$acc"
+            try {
+                $req = [System.Net.FtpWebRequest]::Create($uri)
+                $req.Method = [System.Net.WebRequestMethods+Ftp]::MakeDirectory
+                $req.Credentials = New-Object System.Net.NetworkCredential($ftpUser, $ftpPass)
+                $req.GetResponse() | Out-Null
+            } catch {
+                # игнорируем ошибки (включая "550 Directory already exists")
+            }
+        }
     } catch {
         # Игнорируем ошибки (обычно "550 Directory already exists")
     }
